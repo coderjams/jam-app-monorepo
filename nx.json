@@ -1,30 +1,37 @@
 {
-  "implicitDependencies": {
-    "package.json": {
-      "dependencies": "*",
-      "devDependencies": "*"
+    "implicitDependencies": {
+        "package.json": {
+            "dependencies": "*",
+            "devDependencies": "*"
+        },
+        ".eslintrc.json": "*"
     },
-    ".eslintrc.json": "*"
-  },
-  "affected": {
-    "defaultBase": "master"
-  },
-  "npmScope": "jam-app",
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "@nrwl/workspace/tasks-runners/default",
-      "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"]
-      }
-    }
-  },
-  "projects": {
-    "jam-app": {
-      "tags": []
+    "affected": {
+        "defaultBase": "master"
     },
-    "jam-app-e2e": {
-      "tags": [],
-      "implicitDependencies": ["jam-app"]
+    "npmScope": "jam-app",
+    "tasksRunnerOptions": {
+        "default": {
+            "runner": "@nrwl/workspace/tasks-runners/default",
+            "options": {
+                "cacheableOperations": ["build", "lint", "test", "e2e"]
+            }
+        }
+    },
+    "projects": {
+        "jam-app": {
+            "tags": []
+        },
+        "jam-app-e2e": {
+            "tags": [],
+            "implicitDependencies": ["jam-app"]
+        },
+        "jam-admin": {
+            "tags": []
+        },
+        "jam-admin-e2e": {
+            "tags": [],
+            "implicitDependencies": ["jam-admin"]
+        }
     }
-  }
 }
