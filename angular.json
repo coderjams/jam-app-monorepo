@@ -1,155 +1,274 @@
 {
-  "version": 1,
-  "cli": {
-    "defaultCollection": "@nrwl/angular"
-  },
-  "defaultProject": "jam-app",
-  "schematics": {
-    "@nrwl/angular": {
-      "application": {
-        "linter": "eslint"
-      },
-      "library": {
-        "linter": "eslint"
-      },
-      "storybook-configuration": {
-        "linter": "eslint"
-      }
+    "version": 1,
+    "cli": {
+        "defaultCollection": "@nrwl/angular"
     },
-    "@nrwl/angular:application": {
-      "style": "scss",
-      "linter": "eslint",
-      "unitTestRunner": "jest",
-      "e2eTestRunner": "cypress"
+    "defaultProject": "jam-app",
+    "schematics": {
+        "@nrwl/angular": {
+            "application": {
+                "linter": "eslint"
+            },
+            "library": {
+                "linter": "eslint"
+            },
+            "storybook-configuration": {
+                "linter": "eslint"
+            }
+        },
+        "@nrwl/angular:application": {
+            "style": "scss",
+            "linter": "eslint",
+            "unitTestRunner": "jest",
+            "e2eTestRunner": "cypress"
+        },
+        "@nrwl/angular:library": {
+            "style": "scss",
+            "linter": "eslint",
+            "unitTestRunner": "jest"
+        },
+        "@nrwl/angular:component": {
+            "style": "scss"
+        }
     },
-    "@nrwl/angular:library": {
-      "style": "scss",
-      "linter": "eslint",
-      "unitTestRunner": "jest"
-    },
-    "@nrwl/angular:component": {
-      "style": "scss"
-    }
-  },
-  "projects": {
-    "jam-app": {
-      "projectType": "application",
-      "root": "apps/jam-app",
-      "sourceRoot": "apps/jam-app/src",
-      "prefix": "jam-app",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "outputPath": "dist/apps/jam-app",
-            "index": "apps/jam-app/src/index.html",
-            "main": "apps/jam-app/src/main.ts",
-            "polyfills": "apps/jam-app/src/polyfills.ts",
-            "tsConfig": "apps/jam-app/tsconfig.app.json",
-            "inlineStyleLanguage": "scss",
-            "assets": [
-              "apps/jam-app/src/favicon.ico",
-              "apps/jam-app/src/assets"
-            ],
-            "styles": ["apps/jam-app/src/styles.scss"],
-            "scripts": []
-          },
-          "configurations": {
-            "production": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+    "projects": {
+        "jam-app": {
+            "projectType": "application",
+            "root": "apps/jam-app",
+            "sourceRoot": "apps/jam-app/src",
+            "prefix": "jam-app",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-angular:browser",
+                    "outputs": ["{options.outputPath}"],
+                    "options": {
+                        "outputPath": "dist/apps/jam-app",
+                        "index": "apps/jam-app/src/index.html",
+                        "main": "apps/jam-app/src/main.ts",
+                        "polyfills": "apps/jam-app/src/polyfills.ts",
+                        "tsConfig": "apps/jam-app/tsconfig.app.json",
+                        "inlineStyleLanguage": "scss",
+                        "assets": [
+                            "apps/jam-app/src/favicon.ico",
+                            "apps/jam-app/src/assets"
+                        ],
+                        "styles": ["apps/jam-app/src/styles.scss"],
+                        "scripts": []
+                    },
+                    "configurations": {
+                        "production": {
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "500kb",
+                                    "maximumError": "1mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "2kb",
+                                    "maximumError": "4kb"
+                                }
+                            ],
+                            "fileReplacements": [
+                                {
+                                    "replace": "apps/jam-app/src/environments/environment.ts",
+                                    "with": "apps/jam-app/src/environments/environment.prod.ts"
+                                }
+                            ],
+                            "outputHashing": "all"
+                        },
+                        "development": {
+                            "buildOptimizer": false,
+                            "optimization": false,
+                            "vendorChunk": true,
+                            "extractLicenses": false,
+                            "sourceMap": true,
+                            "namedChunks": true
+                        }
+                    },
+                    "defaultConfiguration": "production"
                 },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                "serve": {
+                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "configurations": {
+                        "production": {
+                            "browserTarget": "jam-app:build:production"
+                        },
+                        "development": {
+                            "browserTarget": "jam-app:build:development"
+                        }
+                    },
+                    "defaultConfiguration": "development"
+                },
+                "extract-i18n": {
+                    "builder": "@angular-devkit/build-angular:extract-i18n",
+                    "options": {
+                        "browserTarget": "jam-app:build"
+                    }
+                },
+                "lint": {
+                    "builder": "@nrwl/linter:eslint",
+                    "options": {
+                        "lintFilePatterns": [
+                            "apps/jam-app/src/**/*.ts",
+                            "apps/jam-app/src/**/*.html"
+                        ]
+                    }
+                },
+                "test": {
+                    "builder": "@nrwl/jest:jest",
+                    "outputs": ["coverage/apps/jam-app"],
+                    "options": {
+                        "jestConfig": "apps/jam-app/jest.config.js",
+                        "passWithNoTests": true
+                    }
                 }
-              ],
-              "fileReplacements": [
-                {
-                  "replace": "apps/jam-app/src/environments/environment.ts",
-                  "with": "apps/jam-app/src/environments/environment.prod.ts"
+            }
+        },
+        "jam-app-e2e": {
+            "root": "apps/jam-app-e2e",
+            "sourceRoot": "apps/jam-app-e2e/src",
+            "projectType": "application",
+            "architect": {
+                "e2e": {
+                    "builder": "@nrwl/cypress:cypress",
+                    "options": {
+                        "cypressConfig": "apps/jam-app-e2e/cypress.json",
+                        "tsConfig": "apps/jam-app-e2e/tsconfig.e2e.json",
+                        "devServerTarget": "jam-app:serve:development"
+                    },
+                    "configurations": {
+                        "production": {
+                            "devServerTarget": "jam-app:serve:production"
+                        }
+                    }
+                },
+                "lint": {
+                    "builder": "@nrwl/linter:eslint",
+                    "options": {
+                        "lintFilePatterns": ["apps/jam-app-e2e/**/*.{js,ts}"]
+                    }
                 }
-              ],
-              "outputHashing": "all"
-            },
-            "development": {
-              "buildOptimizer": false,
-              "optimization": false,
-              "vendorChunk": true,
-              "extractLicenses": false,
-              "sourceMap": true,
-              "namedChunks": true
             }
-          },
-          "defaultConfiguration": "production"
         },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "configurations": {
-            "production": {
-              "browserTarget": "jam-app:build:production"
-            },
-            "development": {
-              "browserTarget": "jam-app:build:development"
+        "jam-admin": {
+            "projectType": "application",
+            "root": "apps/jam-admin",
+            "sourceRoot": "apps/jam-admin/src",
+            "prefix": "jam-app",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-angular:browser",
+                    "outputs": ["{options.outputPath}"],
+                    "options": {
+                        "outputPath": "dist/apps/jam-admin",
+                        "index": "apps/jam-admin/src/index.html",
+                        "main": "apps/jam-admin/src/main.ts",
+                        "polyfills": "apps/jam-admin/src/polyfills.ts",
+                        "tsConfig": "apps/jam-admin/tsconfig.app.json",
+                        "inlineStyleLanguage": "scss",
+                        "assets": [
+                            "apps/jam-admin/src/favicon.ico",
+                            "apps/jam-admin/src/assets"
+                        ],
+                        "styles": ["apps/jam-admin/src/styles.scss"],
+                        "scripts": []
+                    },
+                    "configurations": {
+                        "production": {
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "500kb",
+                                    "maximumError": "1mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "2kb",
+                                    "maximumError": "4kb"
+                                }
+                            ],
+                            "fileReplacements": [
+                                {
+                                    "replace": "apps/jam-admin/src/environments/environment.ts",
+                                    "with": "apps/jam-admin/src/environments/environment.prod.ts"
+                                }
+                            ],
+                            "outputHashing": "all"
+                        },
+                        "development": {
+                            "buildOptimizer": false,
+                            "optimization": false,
+                            "vendorChunk": true,
+                            "extractLicenses": false,
+                            "sourceMap": true,
+                            "namedChunks": true
+                        }
+                    },
+                    "defaultConfiguration": "production"
+                },
+                "serve": {
+                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "configurations": {
+                        "production": {
+                            "browserTarget": "jam-admin:build:production"
+                        },
+                        "development": {
+                            "browserTarget": "jam-admin:build:development"
+                        }
+                    },
+                    "defaultConfiguration": "development"
+                },
+                "extract-i18n": {
+                    "builder": "@angular-devkit/build-angular:extract-i18n",
+                    "options": {
+                        "browserTarget": "jam-admin:build"
+                    }
+                },
+                "lint": {
+                    "builder": "@nrwl/linter:eslint",
+                    "options": {
+                        "lintFilePatterns": [
+                            "apps/jam-admin/src/**/*.ts",
+                            "apps/jam-admin/src/**/*.html"
+                        ]
+                    }
+                },
+                "test": {
+                    "builder": "@nrwl/jest:jest",
+                    "outputs": ["coverage/apps/jam-admin"],
+                    "options": {
+                        "jestConfig": "apps/jam-admin/jest.config.js",
+                        "passWithNoTests": true
+                    }
+                }
             }
-          },
-          "defaultConfiguration": "development"
         },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "jam-app:build"
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "apps/jam-app/src/**/*.ts",
-              "apps/jam-app/src/**/*.html"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/jam-app"],
-          "options": {
-            "jestConfig": "apps/jam-app/jest.config.js",
-            "passWithNoTests": true
-          }
+        "jam-admin-e2e": {
+            "root": "apps/jam-admin-e2e",
+            "sourceRoot": "apps/jam-admin-e2e/src",
+            "projectType": "application",
+            "architect": {
+                "e2e": {
+                    "builder": "@nrwl/cypress:cypress",
+                    "options": {
+                        "cypressConfig": "apps/jam-admin-e2e/cypress.json",
+                        "tsConfig": "apps/jam-admin-e2e/tsconfig.e2e.json",
+                        "devServerTarget": "jam-admin:serve:development"
+                    },
+                    "configurations": {
+                        "production": {
+                            "devServerTarget": "jam-admin:serve:production"
+                        }
+                    }
+                },
+                "lint": {
+                    "builder": "@nrwl/linter:eslint",
+                    "options": {
+                        "lintFilePatterns": ["apps/jam-admin-e2e/**/*.{js,ts}"]
+                    }
+                }
+            }
         }
-      }
-    },
-    "jam-app-e2e": {
-      "root": "apps/jam-app-e2e",
-      "sourceRoot": "apps/jam-app-e2e/src",
-      "projectType": "application",
-      "architect": {
-        "e2e": {
-          "builder": "@nrwl/cypress:cypress",
-          "options": {
-            "cypressConfig": "apps/jam-app-e2e/cypress.json",
-            "tsConfig": "apps/jam-app-e2e/tsconfig.e2e.json",
-            "devServerTarget": "jam-app:serve:development"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "jam-app:serve:production"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/jam-app-e2e/**/*.{js,ts}"]
-          }
-        }
-      }
     }
-  }
 }
